@@ -56,6 +56,26 @@ app.post("/webhook", async function (req, res) {
         //console.log("response =====>  ", response.data);
       });
 
+    const keywordName = "";
+    const convName = "";
+    switch (inputMessage) {
+      case "Promotions_show":
+        // code block
+        keywordName = "Promotions_show";
+        convName = "Promotions_show";
+        break;
+      case "Main_menu":
+        keywordName = "Main_menu";
+        convName = "Main_menu";
+        break;
+      default:
+      // code block
+    }
+    //******** CHECK KEY WORD INPUT */
+    const InputTextGa4 = keywordName;
+    const convGa4 = convName;
+    //******Add Conversion Name */
+
     // TODO CONDITION **********
     if (getData.message === "NO FOUND DATA") {
       console.log("NO DATA IN CHATBOT=====>  ", getData.message);
@@ -95,80 +115,41 @@ app.post("/webhook", async function (req, res) {
       // console.log("FOUND DATAMESSAGE=====>  ", getData.message);
 
       //Todo chat message check condition
-      if (inputMessage === "Promotions_show") {
-        console.log("Promotions_show =====>  ");
-        //Todo SEND TO API
-        // Send to GA API
-        messageToApiA(botUserId, inputMessage);
-        // payload data *******************
-        const dataString = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: samplePayload(),
+
+      //Todo SEND TO API
+      // Send to GA API
+      messageToApiA(botUserId, inputMessage, InputTextGa4, convGa4);
+      // payload data *******************
+      const dataString = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: samplePayload(),
+      });
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + channelAccessToken,
+      };
+
+      const webhookOptions = {
+        hostname: "api.line.me",
+        path: "/v2/bot/message/reply",
+        method: "POST",
+        headers: headers,
+        body: dataString,
+      };
+
+      const request = https.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+          process.stdout.write(d);
         });
+      });
 
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + channelAccessToken,
-        };
+      request.on("error", (err) => {
+        console.error(err);
+      });
 
-        const webhookOptions = {
-          hostname: "api.line.me",
-          path: "/v2/bot/message/reply",
-          method: "POST",
-          headers: headers,
-          body: dataString,
-        };
-
-        const request = https.request(webhookOptions, (res) => {
-          res.on("data", (d) => {
-            process.stdout.write(d);
-          });
-        });
-
-        request.on("error", (err) => {
-          console.error(err);
-        });
-
-        request.write(dataString);
-        request.end();
-
-        // payload data ******************* end
-      } else if (inputMessage === "Main_menu") {
-        console.log("Main_menu =====>  ");
-        //Todo SEND TO API
-      } else {
-        console.log("IGNORE =====>  ");
-        // const dataString = JSON.stringify({
-        //   replyToken: req.body.events[0].replyToken,
-        //   messages: samplePayload(),
-        // });
-
-        // const headers = {
-        //   "Content-Type": "application/json",
-        //   Authorization: "Bearer " + channelAccessToken,
-        // };
-
-        // const webhookOptions = {
-        //   hostname: "api.line.me",
-        //   path: "/v2/bot/message/reply",
-        //   method: "POST",
-        //   headers: headers,
-        //   body: dataString,
-        // };
-
-        // const request = https.request(webhookOptions, (res) => {
-        //   res.on("data", (d) => {
-        //     process.stdout.write(d);
-        //   });
-        // });
-
-        // request.on("error", (err) => {
-        //   console.error(err);
-        // });
-
-        // request.write(dataString);
-        // request.end();
-      }
+      request.write(dataString);
+      request.end();
     }
   } else if (req.body.events[0].type === "postback") {
     console.log(
@@ -240,7 +221,7 @@ async function findDataFromBotUserId(botUserId) {
 
 //TODO API FROM INPUT MESSAGE
 
-async function messageToApiA(botUserId, inputMessage) {
+async function messageToApiA(botUserId, inputMessage, _InputTextGa4, _convGa4) {
   //find data from db & input param ******
   await findDataFromBotUserId(botUserId).then((_resData) => {
     console.log("checkBotUserId-->data ******* ", _resData.sendData);
@@ -253,19 +234,19 @@ async function messageToApiA(botUserId, inputMessage) {
         non_personalized_ads: false,
         user_properties: {
           ipAddress: {
-            value: _resData.sendData.ipAddress,
+            value: _resData.sendData.ipAddressWebStart,
           },
         },
         events: [
           {
-            name: "LinePromotion",
+            name: _convGa4,
             params: {
               campaign_id: inputMessage + _resData.sendData.userId,
               campaign: inputMessage,
               source: _resData.sendData.utm_source,
               medium: _resData.sendData.utm_medium,
-              term: "LinePromotion",
-              content: "Check Conversion from LinePromotion",
+              term: inputMessage,
+              content: _InputTextGa4,
               client_id: _resData.sendData.client_id,
               user_id: _resData.sendData.userId,
               ipAddress: _resData.sendData.ipAddressWebStart,
