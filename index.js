@@ -64,8 +64,9 @@ app.post("/webhook", async function (req, res) {
         keywordName = "Promotions_show";
         convName = "Promotions_show";
         break;
-      case y:
-        // code block
+      case "Main_menu":
+        keywordName = "Main_menu";
+        convName = "Main_menu";
         break;
       default:
       // code block
