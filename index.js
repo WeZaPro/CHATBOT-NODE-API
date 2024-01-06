@@ -233,7 +233,7 @@ async function messageToApiA(botUserId, inputMessage, _InputTextGa4, _convGa4) {
         non_personalized_ads: false,
         user_properties: {
           ipAddress: {
-            value: _resData.sendData.ipAddress,
+            value: _resData.sendData.ipAddressWebStart,
           },
         },
         events: [
@@ -244,11 +244,11 @@ async function messageToApiA(botUserId, inputMessage, _InputTextGa4, _convGa4) {
               campaign: inputMessage,
               source: _resData.sendData.utm_source,
               medium: _resData.sendData.utm_medium,
-              term: "LinePromotion",
+              term: inputMessage,
               content: _InputTextGa4,
               client_id: _resData.sendData.client_id,
-              user_id: _resData.sendData.user_id,
-              ipAddress: _resData.sendData.ipAddress,
+              user_id: _resData.sendData.userId,
+              ipAddress: _resData.sendData.ipAddressWebStart,
 
               session_id: _resData.sendData.sessionId,
               uniqueEventId: _resData.sendData.uniqueEventId,
