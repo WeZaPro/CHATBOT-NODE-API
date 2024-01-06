@@ -253,7 +253,7 @@ async function messageToApiA(botUserId, inputMessage) {
         non_personalized_ads: false,
         user_properties: {
           ipAddress: {
-            value: _resData.sendData.ipAddress,
+            value: _resData.sendData.ipAddressWebStart,
           },
         },
         events: [
