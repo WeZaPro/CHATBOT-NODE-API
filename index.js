@@ -324,7 +324,10 @@ async function messageToApiA(botUserId, inputMessage) {
 function setRegister(botUserId) {
   console.log("botUserId -> ", botUserId);
   // var urlLiff = `line://app/1656824759-qbyK4305/path?botUserId=` + botUserId;
-  var urlLiff = `line://app/1656824759-qbyK4305/path?botUserId=` + botUserId;
+  var urlLiff =
+    `line://app/1656824759-qbyK4305/path?botUserId=` +
+    botUserId +
+    "&setIpAddress=223.204.232.28";
 
   console.log("urlLiff -> ", urlLiff);
   return [
