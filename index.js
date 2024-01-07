@@ -246,6 +246,7 @@ async function messageToApiA(botUserId, inputMessage) {
     console.log("checkBotUserId-->data ******* ", _resData.sendData);
     console.log("utm_source-->", _resData.sendData.utm_source);
     console.log("utm_medium-->", _resData.sendData.utm_medium);
+    console.log("utm_term-->", _resData.sendData.utm_term);
     if (_resData.message === "FOUND DATA") {
       let data = JSON.stringify({
         client_id: _resData.sendData.client_id,
@@ -264,7 +265,7 @@ async function messageToApiA(botUserId, inputMessage) {
               campaign: inputMessage,
               source: _resData.sendData.utm_source,
               medium: _resData.sendData.utm_medium,
-              term: "LinePromotion",
+              term: _resData.sendData.utm_term,
               content: "Check Conversion from LinePromotion",
               client_id: _resData.sendData.client_id,
               user_id: _resData.sendData.userId,
