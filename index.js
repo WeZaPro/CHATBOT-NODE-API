@@ -31,7 +31,10 @@ app.post("/webhook", async function (req, res) {
   let displayName = "";
   let _destination = req.body.destination;
   const botUserId = req.body.events[0].source.userId;
-  console.log("QUERY STRING:req.body ===> ", req.body);
+  console.log(
+    "QUERY STRING:req.body.events[0].source ===> ",
+    req.body.events[0].source
+  );
 
   //console.log("input text:===> ", inputMessage);
 
